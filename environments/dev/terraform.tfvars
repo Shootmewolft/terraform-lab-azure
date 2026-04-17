@@ -1,5 +1,5 @@
 # PROJECT CONFIG
-subscription_id     = "c5d9c2b7-44cd-40c2-aea5-b78f1cd6ca83"
+subscription_id     = "cce5c026-580b-4065-aa3c-0bf825c96a0c"
 location            = "eastus"
 resource_group_name = "rg-arq-nube-dev"
 project_name        = "arq-nube"
