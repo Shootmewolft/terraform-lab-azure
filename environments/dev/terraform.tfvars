@@ -1,6 +1,6 @@
 # PROJECT CONFIG
 subscription_id     = "cce5c026-580b-4065-aa3c-0bf825c96a0c"
-location            = "eastus2"
+location            = "centralus"
 resource_group_name = "rg-arq-nube-dev"
 project_name        = "arq-nube"
 environment         = "dev"
@@ -42,4 +42,4 @@ mysql_version        = "8.0.21"
 # WEB APP CONFIG
 subnet_webapp_cidr = ["10.1.1.0/24"]
 web_app_name       = "app-arqnube-dev"
-app_service_sku    = "F1"
+app_service_sku    = "B1"
