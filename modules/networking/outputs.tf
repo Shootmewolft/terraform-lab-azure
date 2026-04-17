@@ -77,3 +77,11 @@ output "subnet_mysql_id" {
 output "subnet_mysql_name" {
   value = azurerm_subnet.mysql.name
 }
+
+output "subnet_webapp_id" {
+  value = azurerm_subnet.webapp.id
+}
+
+output "subnet_webapp_name" {
+  value = azurerm_subnet.webapp.name
+}

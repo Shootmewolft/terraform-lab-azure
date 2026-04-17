@@ -17,6 +17,15 @@ resource "azurerm_private_dns_zone_virtual_network_link" "mysql" {
   tags                  = var.tags
 }
 
+resource "azurerm_private_dns_zone_virtual_network_link" "mysql_dmz" {
+  name                  = "mysql-dns-link-dmz"
+  resource_group_name   = var.resource_group_name
+  private_dns_zone_name = azurerm_private_dns_zone.mysql.name
+  virtual_network_id    = var.vnet_dmz_id
+  registration_enabled  = false
+  tags                  = var.tags
+}
+
 resource "azurerm_mysql_flexible_server" "this" {
   name                   = var.mysql_server_name
   resource_group_name    = var.resource_group_name
@@ -36,7 +45,8 @@ resource "azurerm_mysql_flexible_server" "this" {
   }
 
   depends_on = [
-    azurerm_private_dns_zone_virtual_network_link.mysql
+    azurerm_private_dns_zone_virtual_network_link.mysql,
+    azurerm_private_dns_zone_virtual_network_link.mysql_dmz
   ]
 
   tags = var.tags

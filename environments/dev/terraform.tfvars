@@ -30,7 +30,7 @@ admin_username = "azureadmin"
 admin_password = "@Lvaro07"
 
 # DATABASE CONFIG
-subnet_mysql_cidr = ["10.0.4.0/24"]
+subnet_mysql_cidr    = ["10.0.4.0/24"]
 mysql_server_name    = "mysqlarqnubedev01"
 mysql_admin_username = "mysqladmin"
 mysql_admin_password = "@Lvaro07"
@@ -38,3 +38,8 @@ mysql_database_name  = "arqnube"
 mysql_sku_name       = "B_Standard_B1ms"
 mysql_storage_gb     = 20
 mysql_version        = "8.0.21"
+
+# WEB APP CONFIG
+subnet_webapp_cidr = ["10.1.1.0/24"]
+web_app_name       = "app-arqnube-dev"
+app_service_sku    = "B1"

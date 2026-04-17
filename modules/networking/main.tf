@@ -10,6 +10,7 @@ locals {
   subnet_mysql_name   = "snet-mysql"
   subnet_ctg_name     = "snet-ctg"
   subnet_dmz_name     = "snet-dmz"
+  subnet_webapp_name  = "snet-webapp"
 }
 
 resource "azurerm_virtual_network" "prod" {
@@ -94,6 +95,24 @@ resource "azurerm_subnet" "dmz" {
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.dmz.name
   address_prefixes     = var.subnet_dmz_cidr
+}
+
+resource "azurerm_subnet" "webapp" {
+  name                 = local.subnet_webapp_name
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.dmz.name
+  address_prefixes     = var.subnet_webapp_cidr
+
+  delegation {
+    name = "webapp-delegation"
+
+    service_delegation {
+      name = "Microsoft.Web/serverFarms"
+      actions = [
+        "Microsoft.Network/virtualNetworks/subnets/action"
+      ]
+    }
+  }
 }
 
 resource "azurerm_virtual_network_peering" "prod_to_ctg" {

@@ -21,3 +21,7 @@ output "nsg_lan_id" {
 output "nsg_mysql_id" {
   value = azurerm_network_security_group.mysql.id
 }
+
+output "nsg_webapp_id" {
+  value = azurerm_network_security_group.webapp.id
+}

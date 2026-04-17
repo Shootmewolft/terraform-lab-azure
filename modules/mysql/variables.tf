@@ -59,3 +59,8 @@ variable "vnet_prod_id" {
   description = "ID de la VNet de Producción"
   type        = string
 }
+
+variable "vnet_dmz_id" {
+  description = "ID de la VNet DMZ"
+  type        = string
+}

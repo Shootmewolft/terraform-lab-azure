@@ -5,6 +5,7 @@ locals {
   nsg_dmz_name     = "nsg-${var.project_name}-dmz-${var.environment}"
   nsg_lan_name     = "nsg-${var.project_name}-lan-${var.environment}"
   nsg_mysql_name   = "nsg-${var.project_name}-mysql-${var.environment}"
+  nsg_webapp_name  = "nsg-${var.project_name}-webapp-${var.environment}"
 }
 
 resource "azurerm_network_security_group" "prd" {
@@ -465,6 +466,20 @@ resource "azurerm_network_security_rule" "mysql_allow_lan" {
   network_security_group_name = azurerm_network_security_group.mysql.name
 }
 
+resource "azurerm_network_security_rule" "mysql_allow_webapp" {
+  name                        = "allow-webapp-to-mysql"
+  priority                    = 115
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "3306"
+  source_address_prefix       = "10.1.1.0/24"
+  destination_address_prefix  = "*"
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.mysql.name
+}
+
 resource "azurerm_network_security_rule" "mysql_deny_ctg" {
   name                        = "deny-ctg-to-mysql"
   priority                    = 120
@@ -491,6 +506,59 @@ resource "azurerm_network_security_rule" "mysql_deny_dmz" {
   destination_address_prefix  = "*"
   resource_group_name         = var.resource_group_name
   network_security_group_name = azurerm_network_security_group.mysql.name
+}
+
+# -------------------------
+# NSG Web App
+# -------------------------
+
+resource "azurerm_network_security_group" "webapp" {
+  name                = local.nsg_webapp_name
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  tags                = var.tags
+}
+
+resource "azurerm_network_security_rule" "webapp_allow_mysql" {
+  name                        = "allow-webapp-to-mysql"
+  priority                    = 100
+  direction                   = "Outbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "3306"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "10.0.4.0/24"
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.webapp.name
+}
+
+resource "azurerm_network_security_rule" "webapp_deny_ctg" {
+  name                        = "deny-webapp-to-ctg"
+  priority                    = 110
+  direction                   = "Outbound"
+  access                      = "Deny"
+  protocol                    = "*"
+  source_port_range           = "*"
+  destination_port_range      = "*"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "10.3.0.0/24"
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.webapp.name
+}
+
+resource "azurerm_network_security_rule" "webapp_deny_lan" {
+  name                        = "deny-webapp-to-lan"
+  priority                    = 120
+  direction                   = "Outbound"
+  access                      = "Deny"
+  protocol                    = "*"
+  source_port_range           = "*"
+  destination_port_range      = "*"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "10.0.3.0/24"
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.webapp.name
 }
 
 # -------------------------
@@ -525,4 +593,9 @@ resource "azurerm_subnet_network_security_group_association" "lan" {
 resource "azurerm_subnet_network_security_group_association" "mysql" {
   subnet_id                 = var.subnet_mysql_id
   network_security_group_id = azurerm_network_security_group.mysql.id
+}
+
+resource "azurerm_subnet_network_security_group_association" "webapp" {
+  subnet_id                 = var.subnet_webapp_id
+  network_security_group_id = azurerm_network_security_group.webapp.id
 }

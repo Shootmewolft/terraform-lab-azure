@@ -25,7 +25,8 @@ module "networking" {
   subnet_lan_cidr     = var.subnet_lan_cidr
   subnet_ctg_cidr     = var.subnet_ctg_cidr
   subnet_dmz_cidr     = var.subnet_dmz_cidr
-    subnet_mysql_cidr   = var.subnet_mysql_cidr
+  subnet_mysql_cidr   = var.subnet_mysql_cidr
+  subnet_webapp_cidr  = var.subnet_webapp_cidr
 }
 
 module "nsg" {
@@ -43,6 +44,7 @@ module "nsg" {
   subnet_dmz_id     = module.networking.subnet_dmz_id
   subnet_lan_id     = module.networking.subnet_lan_id
   subnet_mysql_id   = module.networking.subnet_mysql_id
+  subnet_webapp_id  = module.networking.subnet_webapp_id
 }
 
 module "bastion" {
@@ -76,18 +78,37 @@ module "admin_vm" {
 module "mysql" {
   source = "../../modules/mysql"
 
-  resource_group_name    = module.resource_group.resource_group_name
-  location               = module.resource_group.location
-  tags                   = var.tags
+  resource_group_name = module.resource_group.resource_group_name
+  location            = module.resource_group.location
+  tags                = var.tags
 
-  mysql_server_name      = var.mysql_server_name
-  mysql_admin_username   = var.mysql_admin_username
-  mysql_admin_password   = var.mysql_admin_password
-  mysql_database_name    = var.mysql_database_name
-  mysql_sku_name         = var.mysql_sku_name
-  mysql_storage_gb       = var.mysql_storage_gb
-  mysql_version          = var.mysql_version
+  mysql_server_name    = var.mysql_server_name
+  mysql_admin_username = var.mysql_admin_username
+  mysql_admin_password = var.mysql_admin_password
+  mysql_database_name  = var.mysql_database_name
+  mysql_sku_name       = var.mysql_sku_name
+  mysql_storage_gb     = var.mysql_storage_gb
+  mysql_version        = var.mysql_version
 
-  subnet_mysql_id        = module.networking.subnet_mysql_id
-  vnet_prod_id           = module.networking.vnet_prod_id
+  subnet_mysql_id = module.networking.subnet_mysql_id
+  vnet_prod_id    = module.networking.vnet_prod_id
+  vnet_dmz_id     = module.networking.vnet_dmz_id
+}
+
+module "webapp" {
+  source = "../../modules/webapp"
+
+  resource_group_name = module.resource_group.resource_group_name
+  location            = module.resource_group.location
+  project_name        = var.project_name
+  environment         = var.environment
+  tags                = var.tags
+
+  web_app_name         = var.web_app_name
+  app_service_sku      = var.app_service_sku
+  subnet_webapp_id     = module.networking.subnet_webapp_id
+  mysql_fqdn           = module.mysql.mysql_fqdn
+  mysql_database_name  = var.mysql_database_name
+  mysql_admin_username = var.mysql_admin_username
+  mysql_admin_password = var.mysql_admin_password
 }

@@ -73,3 +73,15 @@ output "mysql_fqdn" {
 output "mysql_database_name" {
   value = module.mysql.mysql_database_name
 }
+
+output "web_app_name" {
+  value = module.webapp.web_app_name
+}
+
+output "web_app_url" {
+  value = "https://${module.webapp.web_app_default_hostname}"
+}
+
+output "subnet_webapp_id" {
+  value = module.networking.subnet_webapp_id
+}

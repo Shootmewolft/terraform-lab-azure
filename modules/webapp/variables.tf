@@ -24,37 +24,39 @@ variable "tags" {
   default     = {}
 }
 
-variable "subnet_prd_id" {
-  description = "ID de la subred PRD"
+variable "web_app_name" {
+  description = "Nombre de la Web App (debe ser globalmente único)"
   type        = string
 }
 
-variable "subnet_dev_qas_id" {
-  description = "ID de la subred DEV-QAS"
+variable "app_service_sku" {
+  description = "SKU del App Service Plan"
   type        = string
-}
-
-variable "subnet_ctg_id" {
-  description = "ID de la subred CTG"
-  type        = string
-}
-
-variable "subnet_dmz_id" {
-  description = "ID de la subred DMZ"
-  type        = string
-}
-
-variable "subnet_lan_id" {
-  description = "ID de la subred LAN"
-  type        = string
-}
-
-variable "subnet_mysql_id" {
-  description = "ID de la subred MySQL"
-  type        = string
+  default     = "B1"
 }
 
 variable "subnet_webapp_id" {
-  description = "ID de la subred Web App"
+  description = "ID de la subred para VNet Integration"
   type        = string
+}
+
+variable "mysql_fqdn" {
+  description = "FQDN del servidor MySQL Flexible Server"
+  type        = string
+}
+
+variable "mysql_database_name" {
+  description = "Nombre de la base de datos MySQL"
+  type        = string
+}
+
+variable "mysql_admin_username" {
+  description = "Usuario administrador de MySQL"
+  type        = string
+}
+
+variable "mysql_admin_password" {
+  description = "Password administrador de MySQL"
+  type        = string
+  sensitive   = true
 }

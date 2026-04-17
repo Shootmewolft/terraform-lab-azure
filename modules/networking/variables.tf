@@ -73,3 +73,8 @@ variable "subnet_mysql_cidr" {
   description = "CIDR de la subred MySQL"
   type        = list(string)
 }
+
+variable "subnet_webapp_cidr" {
+  description = "CIDR de la subred para Web App VNet Integration"
+  type        = list(string)
+}

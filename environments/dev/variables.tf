@@ -135,3 +135,19 @@ variable "mysql_version" {
   description = "Versión de MySQL"
   type        = string
 }
+
+variable "subnet_webapp_cidr" {
+  description = "CIDR de la subred para Web App VNet Integration"
+  type        = list(string)
+}
+
+variable "web_app_name" {
+  description = "Nombre de la Web App (globalmente único)"
+  type        = string
+}
+
+variable "app_service_sku" {
+  description = "SKU del App Service Plan"
+  type        = string
+  default     = "B1"
+}
