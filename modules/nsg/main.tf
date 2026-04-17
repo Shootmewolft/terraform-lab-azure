@@ -399,9 +399,37 @@ resource "azurerm_network_security_rule" "lan_allow_ad_dns" {
   network_security_group_name = azurerm_network_security_group.lan.name
 }
 
+resource "azurerm_network_security_rule" "lan_allow_sap" {
+  name                        = "allow-lan-to-sap"
+  priority                    = 140
+  direction                   = "Outbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_ranges     = ["3200", "443"]
+  source_address_prefix       = "*"
+  destination_address_prefix  = "10.0.0.0/24"
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.lan.name
+}
+
+resource "azurerm_network_security_rule" "lan_allow_mysql" {
+  name                        = "allow-lan-to-mysql"
+  priority                    = 150
+  direction                   = "Outbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "3306"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "10.0.4.0/24"
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.lan.name
+}
+
 resource "azurerm_network_security_rule" "lan_allow_http_dmz" {
   name                        = "allow-lan-to-dmz-http"
-  priority                    = 140
+  priority                    = 160
   direction                   = "Outbound"
   access                      = "Allow"
   protocol                    = "Tcp"
@@ -415,7 +443,7 @@ resource "azurerm_network_security_rule" "lan_allow_http_dmz" {
 
 resource "azurerm_network_security_rule" "lan_deny_dmz_other" {
   name                        = "deny-lan-to-dmz-other"
-  priority                    = 150
+  priority                    = 170
   direction                   = "Outbound"
   access                      = "Deny"
   protocol                    = "*"

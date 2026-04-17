@@ -5,7 +5,7 @@ $user     = getenv('MYSQL_USER');
 $password = getenv('MYSQLCONNSTR_MySQLConnection') ? parse_str(str_replace(';', '&', getenv('MYSQLCONNSTR_MySQLConnection')), $parts) : null;
 
 // Extraer password del connection string de Azure
-$connStr = getenv('CUSTOMCONNSTR_MySQLConnection') ?: '';
+$connStr = getenv('MYSQLCONNSTR_MySQLConnection') ?: '';
 preg_match('/Pwd=([^;]+)/', $connStr, $matches);
 $password = $matches[1] ?? '';
 
