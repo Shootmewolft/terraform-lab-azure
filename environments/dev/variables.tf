@@ -94,3 +94,44 @@ variable "admin_password" {
   type        = string
   sensitive   = true
 }
+
+variable "subnet_mysql_cidr" {
+  description = "CIDR de la subred MySQL"
+  type        = list(string)
+}
+
+variable "mysql_server_name" {
+  description = "Nombre del servidor MySQL Flexible Server"
+  type        = string
+}
+
+variable "mysql_admin_username" {
+  description = "Usuario administrador de MySQL"
+  type        = string
+}
+
+variable "mysql_admin_password" {
+  description = "Password administrador de MySQL"
+  type        = string
+  sensitive   = true
+}
+
+variable "mysql_database_name" {
+  description = "Nombre de la base de datos inicial"
+  type        = string
+}
+
+variable "mysql_sku_name" {
+  description = "SKU de MySQL Flexible Server"
+  type        = string
+}
+
+variable "mysql_storage_gb" {
+  description = "Almacenamiento en GB para MySQL"
+  type        = number
+}
+
+variable "mysql_version" {
+  description = "Versión de MySQL"
+  type        = string
+}

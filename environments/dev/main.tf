@@ -25,6 +25,7 @@ module "networking" {
   subnet_lan_cidr     = var.subnet_lan_cidr
   subnet_ctg_cidr     = var.subnet_ctg_cidr
   subnet_dmz_cidr     = var.subnet_dmz_cidr
+    subnet_mysql_cidr   = var.subnet_mysql_cidr
 }
 
 module "nsg" {
@@ -41,6 +42,7 @@ module "nsg" {
   subnet_ctg_id     = module.networking.subnet_ctg_id
   subnet_dmz_id     = module.networking.subnet_dmz_id
   subnet_lan_id     = module.networking.subnet_lan_id
+  subnet_mysql_id   = module.networking.subnet_mysql_id
 }
 
 module "bastion" {
@@ -69,4 +71,23 @@ module "admin_vm" {
   vm_size        = var.admin_vm_size
   admin_username = var.admin_username
   admin_password = var.admin_password
+}
+
+module "mysql" {
+  source = "../../modules/mysql"
+
+  resource_group_name    = module.resource_group.resource_group_name
+  location               = module.resource_group.location
+  tags                   = var.tags
+
+  mysql_server_name      = var.mysql_server_name
+  mysql_admin_username   = var.mysql_admin_username
+  mysql_admin_password   = var.mysql_admin_password
+  mysql_database_name    = var.mysql_database_name
+  mysql_sku_name         = var.mysql_sku_name
+  mysql_storage_gb       = var.mysql_storage_gb
+  mysql_version          = var.mysql_version
+
+  subnet_mysql_id        = module.networking.subnet_mysql_id
+  vnet_prod_id           = module.networking.vnet_prod_id
 }

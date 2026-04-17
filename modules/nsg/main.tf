@@ -4,6 +4,7 @@ locals {
   nsg_ctg_name     = "nsg-${var.project_name}-ctg-${var.environment}"
   nsg_dmz_name     = "nsg-${var.project_name}-dmz-${var.environment}"
   nsg_lan_name     = "nsg-${var.project_name}-lan-${var.environment}"
+  nsg_mysql_name   = "nsg-${var.project_name}-mysql-${var.environment}"
 }
 
 resource "azurerm_network_security_group" "prd" {
@@ -426,6 +427,73 @@ resource "azurerm_network_security_rule" "lan_deny_dmz_other" {
 }
 
 # -------------------------
+# NSG MySQL
+# -------------------------
+
+resource "azurerm_network_security_group" "mysql" {
+  name                = local.nsg_mysql_name
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  tags                = var.tags
+}
+
+resource "azurerm_network_security_rule" "mysql_allow_prd" {
+  name                        = "allow-prd-to-mysql"
+  priority                    = 100
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "3306"
+  source_address_prefix       = "10.0.0.0/24"
+  destination_address_prefix  = "*"
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.mysql.name
+}
+
+resource "azurerm_network_security_rule" "mysql_allow_lan" {
+  name                        = "allow-lan-to-mysql"
+  priority                    = 110
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "3306"
+  source_address_prefix       = "10.0.3.0/24"
+  destination_address_prefix  = "*"
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.mysql.name
+}
+
+resource "azurerm_network_security_rule" "mysql_deny_ctg" {
+  name                        = "deny-ctg-to-mysql"
+  priority                    = 120
+  direction                   = "Inbound"
+  access                      = "Deny"
+  protocol                    = "*"
+  source_port_range           = "*"
+  destination_port_range      = "*"
+  source_address_prefix       = "10.3.0.0/24"
+  destination_address_prefix  = "*"
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.mysql.name
+}
+
+resource "azurerm_network_security_rule" "mysql_deny_dmz" {
+  name                        = "deny-dmz-to-mysql"
+  priority                    = 130
+  direction                   = "Inbound"
+  access                      = "Deny"
+  protocol                    = "*"
+  source_port_range           = "*"
+  destination_port_range      = "*"
+  source_address_prefix       = "10.1.0.0/24"
+  destination_address_prefix  = "*"
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.mysql.name
+}
+
+# -------------------------
 # Associations
 # -------------------------
 
@@ -452,4 +520,9 @@ resource "azurerm_subnet_network_security_group_association" "dmz" {
 resource "azurerm_subnet_network_security_group_association" "lan" {
   subnet_id                 = var.subnet_lan_id
   network_security_group_id = azurerm_network_security_group.lan.id
+}
+
+resource "azurerm_subnet_network_security_group_association" "mysql" {
+  subnet_id                 = var.subnet_mysql_id
+  network_security_group_id = azurerm_network_security_group.mysql.id
 }

@@ -17,3 +17,7 @@ output "nsg_dmz_id" {
 output "nsg_lan_id" {
   value = azurerm_network_security_group.lan.id
 }
+
+output "nsg_mysql_id" {
+  value = azurerm_network_security_group.mysql.id
+}

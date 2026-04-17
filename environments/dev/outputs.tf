@@ -57,3 +57,19 @@ output "admin_vm_name" {
 output "admin_vm_private_ip" {
   value = module.admin_vm.private_ip
 }
+
+output "subnet_mysql_id" {
+  value = module.networking.subnet_mysql_id
+}
+
+output "mysql_server_name" {
+  value = module.mysql.mysql_server_name
+}
+
+output "mysql_fqdn" {
+  value = module.mysql.mysql_fqdn
+}
+
+output "mysql_database_name" {
+  value = module.mysql.mysql_database_name
+}

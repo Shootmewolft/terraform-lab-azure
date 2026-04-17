@@ -69,3 +69,11 @@ output "subnet_ctg_name" {
 output "subnet_dmz_name" {
   value = azurerm_subnet.dmz.name
 }
+
+output "subnet_mysql_id" {
+  value = azurerm_subnet.mysql.id
+}
+
+output "subnet_mysql_name" {
+  value = azurerm_subnet.mysql.name
+}

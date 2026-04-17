@@ -68,3 +68,8 @@ variable "subnet_dmz_cidr" {
   description = "CIDR de la subred DMZ"
   type        = list(string)
 }
+
+variable "subnet_mysql_cidr" {
+  description = "CIDR de la subred MySQL"
+  type        = list(string)
+}

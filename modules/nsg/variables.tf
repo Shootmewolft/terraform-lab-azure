@@ -48,3 +48,8 @@ variable "subnet_lan_id" {
   description = "ID de la subred LAN"
   type        = string
 }
+
+variable "subnet_mysql_id" {
+  description = "ID de la subred MySQL"
+  type        = string
+}

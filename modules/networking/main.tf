@@ -7,6 +7,7 @@ locals {
   subnet_dev_qas_name = "snet-dev-qas"
   subnet_bastion_name = "AzureBastionSubnet"
   subnet_lan_name     = "snet-lan"
+  subnet_mysql_name   = "snet-mysql"
   subnet_ctg_name     = "snet-ctg"
   subnet_dmz_name     = "snet-dmz"
 }
@@ -61,6 +62,24 @@ resource "azurerm_subnet" "lan" {
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.prod.name
   address_prefixes     = var.subnet_lan_cidr
+}
+
+resource "azurerm_subnet" "mysql" {
+  name                 = local.subnet_mysql_name
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.prod.name
+  address_prefixes     = var.subnet_mysql_cidr
+
+  delegation {
+    name = "mysql-flexible-delegation"
+
+    service_delegation {
+      name = "Microsoft.DBforMySQL/flexibleServers"
+      actions = [
+        "Microsoft.Network/virtualNetworks/subnets/join/action"
+      ]
+    }
+  }
 }
 
 resource "azurerm_subnet" "ctg" {

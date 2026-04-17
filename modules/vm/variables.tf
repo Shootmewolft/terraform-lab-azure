@@ -34,6 +34,17 @@ variable "vm_name" {
   type        = string
 }
 
+variable "computer_name" {
+  description = "Nombre interno del equipo Windows (maximo 15 caracteres)"
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.computer_name == null || length(var.computer_name) <= 15
+    error_message = "computer_name debe tener como maximo 15 caracteres."
+  }
+}
+
 variable "vm_size" {
   description = "Tamaño de la VM"
   type        = string
