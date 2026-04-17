@@ -20,3 +20,8 @@ subnet_bastion_cidr = ["10.0.2.0/26"]
 subnet_lan_cidr     = ["10.0.3.0/24"]
 subnet_ctg_cidr     = ["10.3.0.0/24"]
 subnet_dmz_cidr     = ["10.1.0.0/24"]
+
+admin_vm_name  = "vm-admin-lan-dev"
+admin_vm_size  = "Standard_B1ms"
+admin_username = "azureadmin"
+admin_password = "@Lvaro07"

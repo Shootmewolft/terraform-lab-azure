@@ -41,3 +41,19 @@ output "subnet_ctg_id" {
 output "subnet_dmz_id" {
   value = module.networking.subnet_dmz_id
 }
+
+output "bastion_name" {
+  value = module.bastion.bastion_name
+}
+
+output "bastion_public_ip" {
+  value = module.bastion.bastion_public_ip
+}
+
+output "admin_vm_name" {
+  value = module.admin_vm.vm_name
+}
+
+output "admin_vm_private_ip" {
+  value = module.admin_vm.private_ip
+}

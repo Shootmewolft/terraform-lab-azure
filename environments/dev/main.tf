@@ -1,5 +1,5 @@
 module "resource_group" {
-  source = "../modules/resource_group"
+  source = "../../modules/resource_group"
 
   resource_group_name = var.resource_group_name
   location            = var.location
@@ -7,7 +7,7 @@ module "resource_group" {
 }
 
 module "networking" {
-  source = "../modules/networking"
+  source = "../../modules/networking"
 
   resource_group_name = module.resource_group.resource_group_name
   location            = module.resource_group.location
@@ -25,4 +25,48 @@ module "networking" {
   subnet_lan_cidr     = var.subnet_lan_cidr
   subnet_ctg_cidr     = var.subnet_ctg_cidr
   subnet_dmz_cidr     = var.subnet_dmz_cidr
+}
+
+module "nsg" {
+  source = "../../modules/nsg"
+
+  resource_group_name = module.resource_group.resource_group_name
+  location            = module.resource_group.location
+  project_name        = var.project_name
+  environment         = var.environment
+  tags                = var.tags
+
+  subnet_prd_id     = module.networking.subnet_prd_id
+  subnet_dev_qas_id = module.networking.subnet_dev_qas_id
+  subnet_ctg_id     = module.networking.subnet_ctg_id
+  subnet_dmz_id     = module.networking.subnet_dmz_id
+  subnet_lan_id     = module.networking.subnet_lan_id
+}
+
+module "bastion" {
+  source = "../../modules/bastion"
+
+  resource_group_name = module.resource_group.resource_group_name
+  location            = module.resource_group.location
+  project_name        = var.project_name
+  environment         = var.environment
+  tags                = var.tags
+
+  subnet_bastion_id = module.networking.subnet_bastion_id
+}
+
+module "admin_vm" {
+  source = "../../modules/vm"
+
+  resource_group_name = module.resource_group.resource_group_name
+  location            = module.resource_group.location
+  project_name        = var.project_name
+  environment         = var.environment
+  tags                = var.tags
+
+  subnet_id      = module.networking.subnet_lan_id
+  vm_name        = var.admin_vm_name
+  vm_size        = var.admin_vm_size
+  admin_username = var.admin_username
+  admin_password = var.admin_password
 }

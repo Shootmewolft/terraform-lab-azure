@@ -73,3 +73,24 @@ variable "subnet_dmz_cidr" {
   description = "CIDR de la subred DMZ"
   type        = list(string)
 }
+
+variable "admin_vm_name" {
+  description = "Nombre de la VM de administración"
+  type        = string
+}
+
+variable "admin_vm_size" {
+  description = "Tamaño de la VM de administración"
+  type        = string
+}
+
+variable "admin_username" {
+  description = "Usuario administrador de la VM"
+  type        = string
+}
+
+variable "admin_password" {
+  description = "Contraseña del administrador de la VM"
+  type        = string
+  sensitive   = true
+}
